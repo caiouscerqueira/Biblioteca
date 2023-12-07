@@ -4,15 +4,15 @@ import java.util.*;
 
 //Classe principal que gerencia o sistema da biblioteca
 public class LibrarySystem {
- private Map<Integer, Book> books = new HashMap<>();
+ private Map<Integer, Livro> books = new HashMap<>();
  private Map<Integer, User> users = new HashMap<>();
- private List<Loan> loans = new ArrayList<>();
- private List<Reservation> reservations = new ArrayList<>();
+ private List<Emprestimo> loans = new ArrayList<>();
+ private List<Reserva> reservations = new ArrayList<>();
  private Map<Integer, List<Observar>> bookObservers = new HashMap<>();
 
  // Métodos para adicionar livro e usuário
  public void addBook(int code, String title, int availableCopies) {
-     Book book = new Book(code, title, availableCopies);
+     Livro book = new Livro(code, title, availableCopies);
      books.put(code, book);
      bookObservers.put(code, new ArrayList<>());
  }
@@ -23,15 +23,15 @@ public class LibrarySystem {
  }
  
  public void loanBook(int userCode, int bookCode) {
-     User user = users.get(userCode);
-     Book book = books.get(bookCode);
+     Usuario user = users.get(userCode);
+     Livro book = books.get(bookCode);
 
      if (user != null && book != null && book.getAvailableCopies() > 0) {
          int loanDays = getLoanDays(user);
 
          String returnDate = calculateReturnDate(loanDays);
 
-         Loan loan = new Loan(user, book, loanDays, returnDate);
+         Emprestimo loan = new Emprestimo(user, book, loanDays, returnDate);
          loans.add(loan);
 
          book.decreaseAvailableCopies();
@@ -44,11 +44,11 @@ public class LibrarySystem {
  }
  
  public void returnBook(int userCode, int bookCode) {
-     User user = users.get(userCode);
-     Book book = books.get(bookCode);
+     Usuario user = users.get(userCode);
+     Livro book = books.get(bookCode);
 
      if (user != null && book != null) {
-         Loan loan = findLoan(user, book);
+         Emprestimo loan = findLoan(user, book);
 
          if (loan != null) {
              loans.remove(loan);
@@ -64,7 +64,7 @@ public class LibrarySystem {
      }
  }
  
- private int getLoanDays(User user) {
+ private int getLoanDays(Usuario user) {
      // Definir os dias de empréstimo com base no tipo de usuário
      if (user != null) {
          if (user instanceof UndergraduateStudent) {
@@ -95,9 +95,9 @@ public class LibrarySystem {
      return currentDate;
  }
  
- private Loan findLoan(User user, Book book) {
+ private Emprestimo findLoan(Usuario user, Livro book) {
      // Procura se há um empréstimo ativo para o usuário e livro específicos
-     for (Loan loan : loans) {
+     for (Emprestimo loan : loans) {
          if (loan.getUser().equals(user) && loan.getBook().equals(book)) {
              return loan;
          }
@@ -108,11 +108,11 @@ public class LibrarySystem {
  private User createUser(int code, String name, UserType type) {
      switch (type) {
          case UNDERGRADUATE:
-             return new UndergraduateStudent(code, name);
+             return new UndergraduateStudent(code, name, type);
          case POSTGRADUATE:
-             return new PostgraduateStudent(code, name);
+             return new PostgraduateStudent(code, name, type);
          case PROFESSOR:
-             return new Professor(code, name);
+             return new Professor(code, name, type);
          default:
              throw new IllegalArgumentException("Invalid user type");
      }

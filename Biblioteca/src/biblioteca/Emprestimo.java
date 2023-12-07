@@ -1,24 +1,28 @@
 package biblioteca;
 
 //Classe representando um empréstimo
-class Loan {
- private User user;
- private Book book;
+class Emprestimo {
+ private Usuario user;
+ private Livro book;
  private int loanDays;
  private String returnDate;
 
- public Loan(User user, Book book, int loanDays, String returnDate) {
+ public Emprestimo(Usuario user, Livro book, int loanDays, String returnDate) {
      this.user = user;
      this.book = book;
      this.loanDays = loanDays;
      this.returnDate = returnDate;
  }
 
- public User getUser() {
+ public Emprestimo() {
+	// TODO Auto-generated constructor stub
+}
+
+public Usuario getUser() {
      return user;
  }
 
- public Book getBook() {
+ public Livro getBook() {
      return book;
  }
 

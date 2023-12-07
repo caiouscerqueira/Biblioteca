@@ -3,8 +3,8 @@ package biblioteca;
 class Professor extends User {
     private int notificationCount;
 
-    public Professor(int code, String name) {
-        super(code, name);
+    public Professor(int code, String name, UserType tipo) {
+        super(code, name, tipo);
         this.notificationCount = 0;
     }
 

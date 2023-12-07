@@ -1,5 +1,5 @@
 package biblioteca;
 
-public class Reservation {
+public class Reserva {
 
 }
