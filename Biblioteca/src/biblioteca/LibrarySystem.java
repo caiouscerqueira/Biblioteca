@@ -5,20 +5,22 @@ import java.util.*;
 //Classe principal que gerencia o sistema da biblioteca
 public class LibrarySystem {
  private Map<Integer, Livro> books = new HashMap<>();
- private Map<Integer, User> users = new HashMap<>();
+ private Map<Integer, Usuario> users = new HashMap<>();
  private List<Emprestimo> loans = new ArrayList<>();
  private List<Reserva> reservations = new ArrayList<>();
  private Map<Integer, List<Observar>> bookObservers = new HashMap<>();
 
  // Métodos para adicionar livro e usuário
+ 
+  
  public void addBook(int code, String title, int availableCopies) {
-     Livro book = new Livro(code, title, availableCopies);
+	 Livro book = Fabrica.criarLivro().addBook(code, title, availableCopies);
      books.put(code, book);
      bookObservers.put(code, new ArrayList<>());
  }
 
  public void addUser(int code, String name, UserType type) {
-     User user = createUser(code, name, type);
+    Usuario user = Fabrica.criarUsuario().addUser(code, name, type);
      users.put(code, user);
  }
  
@@ -26,7 +28,7 @@ public class LibrarySystem {
      Usuario user = users.get(userCode);
      Livro book = books.get(bookCode);
 
-     if (user != null && book != null && book.getAvailableCopies() > 0) {
+     if (user != null && book != null && book.getCopiasDisponiveis() > 0) {
          int loanDays = getLoanDays(user);
 
          String returnDate = calculateReturnDate(loanDays);
@@ -80,19 +82,10 @@ public class LibrarySystem {
  
  private String calculateReturnDate(int loanDays) {
      // Lógica para calcular a data de devolução com base nos dias de empréstimo
-     // (Implementação simplificada)
-     // Aqui você pode usar bibliotecas de manipulação de datas para uma implementação mais robusta.
-
-     // Data atual (simulação)
-     String currentDate = "01/01/2023";
      
-     // Lógica para calcular a data de devolução (adicionando dias ao atual)
-     // (Implementação simplificada)
-     
-     
-     // Aqui você pode usar bibliotecas de manipulação de datas para uma implementação mais robusta.
-
-     return currentDate;
+	 String retornoEmprestimo = Fabrica.criarEmprestimo().calculateReturnDate(loanDays);
+	 	 
+     return retornoEmprestimo;
  }
  
  private Emprestimo findLoan(Usuario user, Livro book) {
@@ -105,18 +98,7 @@ public class LibrarySystem {
      return null;
  }
 
- private User createUser(int code, String name, UserType type) {
-     switch (type) {
-         case UNDERGRADUATE:
-             return new UndergraduateStudent(code, name, type);
-         case POSTGRADUATE:
-             return new PostgraduateStudent(code, name, type);
-         case PROFESSOR:
-             return new Professor(code, name, type);
-         default:
-             throw new IllegalArgumentException("Invalid user type");
-     }
- }
+ 
 
  // Método principal para processar comandos
  public void processCommand(String command) {

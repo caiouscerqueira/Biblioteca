@@ -1,5 +1,7 @@
 package biblioteca;
 
+import java.util.ArrayList;
+
 //Classe representando um livro
 class Livro {
  private int codigo;
@@ -24,7 +26,7 @@ public int getCode() {
      return titulo;
  }
 
- public int getAvailableCopies() {
+ public int getCopiasDisponiveis() {
      return copiasDisponiveis;
  }
  
@@ -39,4 +41,10 @@ public int getCode() {
  }
 
  // Outros métodos e atributos necessários
+ public Livro addBook(int code, String title, int copiasDisponiveis) {
+     Livro book = new Livro(code, title, copiasDisponiveis);
+     
+     return book;
+    
+ }
 }

@@ -33,5 +33,23 @@ public Usuario getUser() {
  public String getReturnDate() {
      return returnDate;
  }
+ 
+ public String calculateReturnDate(int loanDays) {
+     // Lógica para calcular a data de devolução com base nos dias de empréstimo
+     // (Implementação simplificada)
+     // Aqui você pode usar bibliotecas de manipulação de datas para uma implementação mais robusta.
+
+     // Data atual (simulação)
+     String currentDate = "01/01/2023";
+     
+     // Lógica para calcular a data de devolução (adicionando dias ao atual)
+     // (Implementação simplificada)
+     
+     
+     // Aqui você pode usar bibliotecas de manipulação de datas para uma implementação mais robusta.
+
+     return currentDate;
+ }
+  
 }
 
