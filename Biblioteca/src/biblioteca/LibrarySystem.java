@@ -30,8 +30,6 @@ public class LibrarySystem {
 	 Usuario user = users.get(userCode);
      Livro book = livros.get(bookCode);
 
-     if (user != null && book != null && book.getCopiasDisponiveis() > 0) {
-         
     	 Emprestimo loan = Fabrica.criarEmprestimo();
     	 
     	 String returnDate = loan.calculateReturnDate(user.getLoanDays(user));
@@ -43,11 +41,6 @@ public class LibrarySystem {
 
          book.decreaseAvailableCopies();
 
-         System.out.println("Empréstimo realizado com sucesso para " + user.getName() +
-                 ". Livro: " + book.getTitle() + ". Data de devolução: " + returnDate);
-     } else {
-         System.out.println("Empréstimo não pode ser realizado. Verifique os dados do usuário e do livro.");
-     }
  }
  
  public void returnBook(String userCode, String bookCode) {
@@ -196,7 +189,7 @@ public class LibrarySystem {
 
      // Tenta realizar uma devolução inválida
      librarySystem.returnBook("101", "1");
-     
+    /* 
      librarySystem.processCommand("emp 101 1");
      librarySystem.processCommand("emp 102 2");
      librarySystem.processCommand("emp 201 1");
@@ -208,7 +201,7 @@ public class LibrarySystem {
      librarySystem.processCommand("usu 101");
 
      librarySystem.processCommand("ntf 201");
-
+	*/
      librarySystem.processCommand("sai");
  }
 }

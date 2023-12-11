@@ -8,7 +8,7 @@
 package biblioteca;
 
 public interface Observer {
-	public void update(LivrosObservados livro);
+	//public void update(LivrosObservados livro);
 }
 
   
