@@ -1,39 +1,44 @@
 package biblioteca;
 
+import java.text.ParseException;
 import java.util.*;
 
 //Classe principal que gerencia o sistema da biblioteca
 public class LibrarySystem {
- private Map<Integer, Livro> books = new HashMap<>();
- private Map<Integer, Usuario> users = new HashMap<>();
+ private Map<String, Livro> livros = new HashMap<>();
+ private Map<String, Usuario> users = new HashMap<>();
  private List<Emprestimo> loans = new ArrayList<>();
- private List<Reserva> reservations = new ArrayList<>();
- private Map<Integer, List<Observar>> bookObservers = new HashMap<>();
+ private List<Reserva> reservas = new ArrayList<>();
+ private Map<String, List<Observer>> bookObservers = new HashMap<>();
 
  // Métodos para adicionar livro e usuário
  
   
- public void addBook(int code, String title, int availableCopies) {
+ public void addBook(String code, String title, int availableCopies) {
 	 Livro book = Fabrica.criarLivro().addBook(code, title, availableCopies);
-     books.put(code, book);
+     livros.put(code, book);
      bookObservers.put(code, new ArrayList<>());
  }
 
- public void addUser(int code, String name, UserType type) {
+ public void addUser(String code, String name, UserType type) {
     Usuario user = Fabrica.criarUsuario().addUser(code, name, type);
      users.put(code, user);
  }
  
- public void loanBook(int userCode, int bookCode) {
-     Usuario user = users.get(userCode);
-     Livro book = books.get(bookCode);
+ public void loanBook(String userCode, String bookCode) {
+	 
+	 Usuario user = users.get(userCode);
+     Livro book = livros.get(bookCode);
 
      if (user != null && book != null && book.getCopiasDisponiveis() > 0) {
-         int loanDays = getLoanDays(user);
-
-         String returnDate = calculateReturnDate(loanDays);
-
-         Emprestimo loan = new Emprestimo(user, book, loanDays, returnDate);
+         
+    	 Emprestimo loan = Fabrica.criarEmprestimo();
+    	 
+    	 String returnDate = loan.calculateReturnDate(user.getLoanDays(user));
+        
+    	 loan.loanBook(user, book);
+         
+    	 // Emprestimo loan = new Emprestimo(user, book, loanDays, returnDate);
          loans.add(loan);
 
          book.decreaseAvailableCopies();
@@ -45,9 +50,9 @@ public class LibrarySystem {
      }
  }
  
- public void returnBook(int userCode, int bookCode) {
+ public void returnBook(String userCode, String bookCode) {
      Usuario user = users.get(userCode);
-     Livro book = books.get(bookCode);
+     Livro book = livros.get(bookCode);
 
      if (user != null && book != null) {
          Emprestimo loan = findLoan(user, book);
@@ -66,19 +71,7 @@ public class LibrarySystem {
      }
  }
  
- private int getLoanDays(Usuario user) {
-     // Definir os dias de empréstimo com base no tipo de usuário
-     if (user != null) {
-         if (user instanceof UndergraduateStudent) {
-             return 3;
-         } else if (user instanceof PostgraduateStudent) {
-             return 4;
-         } else if (user instanceof Professor) {
-             return 7;
-         }
-     }
-     return 0;
- }
+ 
  
  private String calculateReturnDate(int loanDays) {
      // Lógica para calcular a data de devolução com base nos dias de empréstimo
@@ -139,12 +132,12 @@ public class LibrarySystem {
  // Métodos para processar comandos específicos
  private void processLoan(String[] parts) {
      // Implementar lógica para processar empréstimo
-     // ...
+	 this.loanBook(parts[1], parts[2]);
  }
 
  private void processReturn(String[] parts) {
      // Implementar lógica para processar devolução
-     // ...
+     this.returnBook(parts[1], parts[2]);
  }
 
  private void processReservation(String[] parts) {
@@ -178,31 +171,31 @@ public class LibrarySystem {
 	 LibrarySystem librarySystem = new LibrarySystem();
 	 
 	 // Adiciona livros
-     librarySystem.addBook(1, "Introduction to Java", 5);
-     librarySystem.addBook(2, "Data Structures and Algorithms", 3);
+     librarySystem.addBook("1", "Introduction to Java", 5);
+     librarySystem.addBook("2", "Data Structures and Algorithms", 3);
      
      // Adiciona usuários
-     librarySystem.addUser(101, "John Doe", UserType.UNDERGRADUATE);
-     librarySystem.addUser(102, "Jane Smith", UserType.POSTGRADUATE);
-     librarySystem.addUser(201, "Professor Johnson", UserType.PROFESSOR);
+     librarySystem.addUser("101", "John Doe", UserType.UNDERGRADUATE);
+     librarySystem.addUser("102", "Jane Smith", UserType.POSTGRADUATE);
+     librarySystem.addUser("201", "Professor Johnson", UserType.PROFESSOR);
 
      // Simulação de comandos (substitua com entrada real do usuário)
      
      // Realiza empréstimos
-     librarySystem.loanBook(101, 1);
-     librarySystem.loanBook(102, 2);
-     librarySystem.loanBook(201, 1);
+     librarySystem.loanBook("101", "1");
+     librarySystem.loanBook("102", "2");
+     librarySystem.loanBook("201", "1");
 
      // Tenta realizar um empréstimo inválido
-     librarySystem.loanBook(101, 2);
+     librarySystem.loanBook("101", "2");
 
      // Realiza devoluções
-     librarySystem.returnBook(101, 1);
-     librarySystem.returnBook(102, 2);
-     librarySystem.returnBook(201, 1);
+     librarySystem.returnBook("101", "1");
+     librarySystem.returnBook("102", "2");
+     librarySystem.returnBook("201", "1");
 
      // Tenta realizar uma devolução inválida
-     librarySystem.returnBook(101, 1);
+     librarySystem.returnBook("101", "1");
      
      librarySystem.processCommand("emp 101 1");
      librarySystem.processCommand("emp 102 2");

@@ -1,8 +1,8 @@
 package biblioteca;
 
-interface Usuario {
+public interface Usuario {
 
-	int getCode();
+	String getCode();
 
 	String getName();
 
@@ -10,6 +10,10 @@ interface Usuario {
 
 	void setTipo(UserType tipo);
 
-	Usuario addUser(int code, String name, UserType type);
+	Usuario addUser(String code, String name, UserType type);
+
+	int getLoanDays(User user);
+
+	int getLoanDays(Usuario user);
 
 }

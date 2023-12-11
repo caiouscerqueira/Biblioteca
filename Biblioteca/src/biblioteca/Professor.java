@@ -5,7 +5,7 @@ class Professor extends User {
     
     private final static int DIAS_EMPRESTIMO = 7; 
     
-    public Professor(int code, String name, UserType tipo) {
+    public Professor(String code, String name, UserType tipo) {
         super(code, name, tipo);
         this.notificationCount = 0;
     }
