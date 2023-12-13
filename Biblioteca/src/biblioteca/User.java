@@ -76,4 +76,13 @@ public class User implements Usuario {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
+	@Override
+	public String consultarUser(String code) {
+		this.code = code;
+		this.getCode();
+		
+		return getCode();
+		
+	}
 }

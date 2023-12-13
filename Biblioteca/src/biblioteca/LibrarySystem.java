@@ -145,17 +145,62 @@ public class LibrarySystem {
 
  private void processBookInfo(String[] parts) {
      // Implementar lógica para obter informações do livro
-     // ...
+     Livro liv = Fabrica.criarLivro();
+     
+     
+     for ( int i = 0; i < livros.size(); i++ ) {
+    	 if(livros.get(i).equals(liv)) {
+    		 int livroReservado = 0;
+    		 List<Usuario> listaReserva = new ArrayList<Usuario>();
+    		 if(reservas.size() > 0) {
+    			 Reserva res = Fabrica.criarReserva().consultarReserva(liv);
+    			 for( int j= 0; j < reservas.size(); j++) {
+    				 if(res.equals(reservas.get(j))) {
+    					 livroReservado = livroReservado +1;
+    					 listaReserva.add(res.getUser());
+    				 }
+    				Emprestimo emp = Fabrica.criarEmprestimo();
+    				String dataDevolucao = emp.calculateReturnDate(res.getUser().getLoanDays(res.getUser()));
+    				
+    				System.out.println("O livro "+ liv.getTitle()+ " possui " +livroReservado+ " reservas, pelos usuários: "+res.getUser().getName()+" .Emprestado em: "+emp.getLoanDays()+", que será devolvido em: "+dataDevolucao+" .");
+    			 }
+    		 }
+    		 
+    	 }    	 
+     }
  }
 
  private void processUserInfo(String[] parts) {
      // Implementar lógica para obter informações do usuário
-     // ...
+     Usuario user = Fabrica.criarUsuario();
+     String codeUser = user.consultarUser(parts[1]);
+     String status = ""; 
+     for (Emprestimo emp:loans ) {
+    	 	if(emp.getUser().getCode().equals(codeUser)) {
+    	 		if(emp != findLoan(emp.getUser(), emp.getBook())) {
+    	 			status = "FINALIZADO";
+    	 		}else {
+    	 			status = "EM CURSO";
+    	 		}
+    	 		String dataDevolucao = emp.calculateReturnDate(emp.getUser().getLoanDays(emp.getUser()));
+    	 		System.out.println("O usuario "+user.getName()+ " possue o emprestimo do livro "+ emp.getBook().getTitle()+" .Emprestado em: "+emp.getLoanDays()+" com status"+status +", que será devolvido em: "+dataDevolucao+" ." );
+    	 	}
+     }
  }
 
  private void processNotificationCount(String[] parts) {
      // Implementar lógica para obter contagem de notificações
-     // ...
+     int reservaSimultanea = 0;
+     for (Reserva res : reservas) {
+    	 if(res.getUser().getCode().equals(parts[1])) {
+    		 reservaSimultanea += reservaSimultanea;
+    	 }
+     }
+          
+     if (reservaSimultanea > 0) {
+    	 if(bookObservers.size()> 1 )
+    		 System.out.println("O professor recebeu "+bookObservers.size()+" notificações");
+     }
  }
 
  // Método principal (main) para demonstração do sistema
@@ -189,7 +234,7 @@ public class LibrarySystem {
 
      // Tenta realizar uma devolução inválida
      librarySystem.returnBook("101", "1");
-    /* 
+     
      librarySystem.processCommand("emp 101 1");
      librarySystem.processCommand("emp 102 2");
      librarySystem.processCommand("emp 201 1");
@@ -201,7 +246,7 @@ public class LibrarySystem {
      librarySystem.processCommand("usu 101");
 
      librarySystem.processCommand("ntf 201");
-	*/
+	
      librarySystem.processCommand("sai");
  }
 }

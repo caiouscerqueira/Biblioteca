@@ -15,5 +15,6 @@ public interface Usuario {
 	int getLoanDays(User user);
 
 	int getLoanDays(Usuario user);
-
+	
+	String consultarUser(String code);
 }
